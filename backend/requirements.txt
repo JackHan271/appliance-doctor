@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+anthropic
+langgraph
+pymilvus
+milvus-lite
+sentence-transformers
+dashscope
+openai
+python-dotenv
+pydantic
+mcp<2
+pypdf
+sqlalchemy
+psycopg2-binary

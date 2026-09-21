@@ -1,0 +1,26 @@
+{
+  "brand": "美的",
+  "brand_en": "Midea",
+  "note": "故障码含义因机型与系列而异，以具体说明书为准。本表为公开资料整理。",
+  "references": [
+    "https://www.midea.com/content/dam/midea-aem/us/refrigerators/bottom-mount/-mrb23d5ast/MRB23D5AST-User-Manual.pdf",
+    "https://ask.zol.com.cn/x/16361687.html"
+  ],
+  "categories": {
+    "refrigerator": {
+      "note": "部分代码在部分新机型含义不同，以说明书为准。",
+      "codes": [
+        {"code": "E1", "meaning": "冷藏室传感器短路或断路", "level": "red", "source": "公开维修资料"},
+        {"code": "E2", "meaning": "微冻室/冷冻室传感器故障", "level": "red", "source": "公开维修资料"},
+        {"code": "E3", "meaning": "冷冻室/变温室传感器故障", "level": "red", "source": "公开维修资料"},
+        {"code": "E4", "meaning": "环温传感器短路或断路", "level": "red", "source": "公开维修资料"},
+        {"code": "E5", "meaning": "E2PROM/除霜传感器故障", "level": "red", "source": "公开维修资料"},
+        {"code": "E6", "meaning": "超温报警（冷冻温度持续过高）", "level": "yellow", "source": "公开维修资料"},
+        {"code": "E7", "meaning": "通讯不合格/化霜传感器故障", "level": "red", "source": "公开维修资料"},
+        {"code": "E8", "meaning": "过零不合格/化霜传感器故障", "level": "red", "source": "公开维修资料"},
+        {"code": "E9", "meaning": "控制板坏或制冷剂泄漏", "level": "red", "source": "公开维修资料"},
+        {"code": "H/L", "meaning": "对应温区温度过高/过低提示", "level": "green", "source": "公开维修资料"}
+      ]
+    }
+  }
+}

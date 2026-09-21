@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家电医生 · 冰箱故障诊断</title>
+<style>
+  :root {
+    --bg: #EAF2F8;
+    --panel: #FFFFFF;
+    --panel-soft: #F5F9FC;
+    --ink: #1A3A5C;
+    --ink-soft: #5B7A94;
+    --line: #D8E6F0;
+    --blue: #2E7DB8;
+    --blue-deep: #1E5A86;
+    --green: #2E9E5B;
+    --green-bg: #E7F5EC;
+    --yellow: #C9911C;
+    --yellow-bg: #FBF3E1;
+    --red: #D64545;
+    --red-bg: #FBEAEA;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6; min-height: 100vh;
+  }
+  header {
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    padding: 14px 28px; display: flex; align-items: center; gap: 14px;
+  }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 18px; }
+  .brand-name { font-size: 17px; font-weight: 700; letter-spacing: .5px; }
+  .brand-sub { font-size: 12px; color: var(--ink-soft); }
+  .header-note { margin-left: auto; font-size: 12px; color: var(--ink-soft); background: var(--panel-soft); border: 1px solid var(--line); padding: 5px 12px; border-radius: 999px; }
+
+  main { display: flex; gap: 20px; padding: 20px 28px; max-width: 1280px; margin: 0 auto; align-items: flex-start; }
+
+  aside { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+  .side-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .side-card h2 { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .side-card h2::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: var(--blue); }
+  .side-card h2 .add-btn { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--blue-deep); background: none; border: 1px solid var(--blue); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+  .side-card h2 .add-btn:hover { background: var(--blue); color: #fff; }
+  .side-card h2 .add-btn::before { content: none; }
+
+  /* 家电/历史条目：可点击展开 */
+  .item { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; background: var(--panel-soft); cursor: pointer; transition: border-color .15s; }
+  .item:hover { border-color: var(--blue); }
+  .item .row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+  .item .title { font-weight: 600; font-size: 14px; flex: 1; }
+  .item .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #EAF2F8; color: var(--blue-deep); white-space: nowrap; }
+  .item .del { flex-shrink: 0; border: none; background: none; color: var(--ink-soft); cursor: pointer; font-size: 13px; padding: 2px 6px; border-radius: 6px; }
+  .item .del:hover { color: var(--red); background: var(--red-bg); }
+  .item .detail { display: none; padding: 0 12px 12px; font-size: 12.5px; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 10px; }
+  .item.open .detail { display: block; }
+  .item .detail b { color: var(--ink); font-weight: 600; }
+  .detail-row { display: flex; justify-content: space-between; padding: 3px 0; }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .dot.green { background: var(--green); } .dot.yellow { background: var(--yellow); } .dot.red { background: var(--red); }
+
+  .safety-tip { font-size: 13px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .safety-tip:last-child { border-bottom: none; }
+  .safety-tip b { display: block; font-size: 12px; color: var(--red); margin-bottom: 2px; }
+
+  /* 提问交互区 */
+  .chat { flex: 1; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); display: flex; flex-direction: column; min-height: 560px; }
+  .chat-head { padding: 14px 20px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 700; }
+  .chat-head span { color: var(--ink-soft); font-weight: 400; font-size: 12px; margin-left: 8px; }
+  .chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+
+  .msg { max-width: 78%; padding: 11px 15px; border-radius: 12px; font-size: 14px; }
+  .msg.user { align-self: flex-end; background: var(--blue); color: #fff; border-bottom-right-radius: 3px; }
+  .msg.agent { align-self: flex-start; background: var(--panel-soft); border: 1px solid var(--line); border-bottom-left-radius: 3px; }
+  .msg.user .img-thumb { display: block; margin-top: 8px; max-width: 180px; border-radius: 8px; }
+
+  .prompt-line { align-self: flex-start; max-width: 78%; }
+  .prompt-line .q { font-size: 14px; background: var(--panel-soft); border: 1px solid var(--line); border-radius: 12px; border-bottom-left-radius: 3px; padding: 11px 15px; }
+  .options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .options button { font-size: 13px; padding: 7px 14px; border-radius: 999px; cursor: pointer; border: 1px solid var(--blue); color: var(--blue-deep); background: #fff; transition: all .15s; }
+  .options button:hover { background: var(--blue); color: #fff; }
+
+  .report { align-self: flex-start; width: 100%; max-width: 92%; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--panel); }
+  .report-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--panel-soft); border-bottom: 1px solid var(--line); }
+  .nameplate { font-size: 11px; color: var(--ink-soft); letter-spacing: 1px; text-transform: uppercase; }
+  .nameplate b { display: block; font-size: 15px; color: var(--ink); letter-spacing: 0; font-weight: 700; margin-top: 1px; }
+  .status-lamp { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; }
+  .lamp { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 4px rgba(0,0,0,.05); }
+  .lamp.green { background: var(--green); } .lamp.yellow { background: var(--yellow); } .lamp.red { background: var(--red); }
+  .report-level { padding: 14px 18px; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+  .report-level .badge { flex-shrink: 0; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .badge.green { background: var(--green-bg); color: var(--green); } .badge.yellow { background: var(--yellow-bg); color: var(--yellow); } .badge.red { background: var(--red-bg); color: var(--red); }
+  .report-body { padding: 0 18px 16px; font-size: 14px; }
+  .report-body h4 { font-size: 12px; color: var(--ink-soft); font-weight: 600; margin: 12px 0 6px; }
+
+  /* 输入区（含图片上传） */
+  .chat-input { border-top: 1px solid var(--line); padding: 14px 20px; display: flex; gap: 10px; align-items: center; }
+  .upload-btn { flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-soft); cursor: pointer; display: grid; place-items: center; color: var(--ink-soft); position: relative; }
+  .upload-btn:hover { border-color: var(--blue); color: var(--blue-deep); }
+  .upload-btn svg { width: 20px; height: 20px; }
+  .upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .preview-wrap { display: flex; align-items: center; gap: 8px; }
+  .preview-wrap img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+  .preview-wrap .rm { border: none; background: none; color: var(--red); cursor: pointer; font-size: 13px; }
+  .chat-input input[type="text"] { flex: 1; padding: 11px 15px; border-radius: 10px; border: 1px solid var(--line); font-size: 14px; color: var(--ink); background: var(--panel-soft); outline: none; }
+  .chat-input input[type="text"]:focus { border-color: var(--blue); }
+  .send-btn { padding: 11px 20px; border: none; border-radius: 10px; background: var(--blue); color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .send-btn:hover { background: var(--blue-deep); }
+
+  .quick { padding: 0 20px 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .quick button { font-size: 12px; padding: 6px 13px; border-radius: 999px; cursor: pointer; border: 1px solid var(--line); background: var(--panel-soft); color: var(--ink); }
+  .quick button:hover { border-color: var(--blue); color: var(--blue-deep); }
+
+  /* 模态框 */
+  .overlay { position: fixed; inset: 0; background: rgba(26,58,92,.35); display: none; place-items: center; z-index: 50; }
+  .overlay.show { display: grid; }
+  .modal { background: var(--panel); border-radius: var(--radius); width: 400px; max-width: 90vw; padding: 22px; }
+  .modal h3 { font-size: 16px; margin-bottom: 16px; }
+  .modal label { display: block; font-size: 12px; color: var(--ink-soft); margin: 10px 0 4px; }
+  .modal input, .modal select { width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 14px; color: var(--ink); outline: none; }
+  .modal input:focus, .modal select:focus { border-color: var(--blue); }
+  .modal .actions { display: flex; gap: 10px; margin-top: 20px; }
+  .modal .actions button { flex: 1; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; }
+  .modal .cancel { background: var(--panel-soft); border: 1px solid var(--line); color: var(--ink); }
+  .modal .confirm { background: var(--blue); border: none; color: #fff; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand-mark">诊</div>
+    <div><div class="brand-name">家电医生</div><div class="brand-sub">冰箱故障诊断 · 三级安全护栏</div></div>
+    <div class="header-note">演示版 · 数据为模拟</div>
+  </header>
+
+  <main>
+    <aside>
+      <div class="side-card">
+        <h2>我的家电<button class="add-btn" id="openAddAppliance">+ 加入家电</button></h2>
+        <div id="applianceList"></div>
+      </div>
+      <div class="side-card">
+        <h2>维修历史</h2>
+        <div id="historyList"></div>
+      </div>
+      <div class="side-card">
+        <h2>通用安全手册</h2>
+        <div class="safety-tip"><b>断电第一</b>任何拆盖/清理内部前先拔电源插头。</div>
+        <div class="safety-tip"><b>勿碰制冷剂</b>涉及压缩机、管路、制冷剂，务必联系售后。</div>
+        <div class="safety-tip"><b>勿用锐器除霜</b>避免戳破内胆或蒸发器。</div>
+      </div>
+    </aside>
+
+    <section class="chat">
+      <div class="chat-head">提问诊断<span>文字或照片描述你的冰箱问题</span></div>
+      <div class="chat-body" id="chatBody"></div>
+      <div class="quick" id="quickBar">
+        <button data-q="冰箱冷藏室不制冷了">冷藏室不制冷</button>
+        <button data-q="冰箱门关不严，有冷气外漏">门关不严</button>
+        <button data-q="冷冻室结冰很厚">冷冻室结冰厚</button>
+        <button data-q="冰箱显示 E1 故障码">显示 E1</button>
+      </div>
+      <div class="chat-input">
+        <label class="upload-btn" title="上传图片">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <input type="file" id="fileInput" accept="image/*" />
+        </label>
+        <div class="preview-wrap" id="previewWrap" style="display:none">
+          <img id="previewImg" alt="预览" />
+          <button class="rm" id="rmImage" title="移除图片">✕</button>
+        </div>
+        <input type="text" id="userInput" placeholder="描述症状，或点上方快捷提问…" />
+        <button class="send-btn" id="sendBtn">发送</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 加入家电模态框 -->
+  <div class="overlay" id="applianceOverlay">
+    <div class="modal">
+      <h3>加入家电</h3>
+      <label>品牌</label>
+      <select id="fBrand"><option>海尔</option><option>美的</option><option>西门子</option></select>
+      <label>型号</label>
+      <input id="fModel" placeholder="如 BCD-470WDPG" />
+      <label>品类</label>
+      <select id="fCategory"><option>冰箱</option><option>空调</option></select>
+      <label>购买日期</label>
+      <input id="fDate" type="date" />
+      <div class="actions">
+        <button class="cancel" id="cancelAppliance">取消</button>
+        <button class="confirm" id="confirmAppliance">加入</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const body = document.getElementById('chatBody');
+  const input = document.getElementById('userInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const fileInput = document.getElementById('fileInput');
+  const previewWrap = document.getElementById('previewWrap');
+  const previewImg = document.getElementById('previewImg');
+  const rmImage = document.getElementById('rmImage');
+  let pendingImage = null; // {dataUrl, name}
+
+  // ---------- 状态（内存模拟） ----------
+  let appliances = [
+    { id: 1, brand: '海尔', model: 'BCD-470WDPG', category: '冰箱', date: '2024-03-15', warranty: '保修至 2027-03' },
+    { id: 2, brand: '美的', model: 'BCD-550WKGPZM', category: '冰箱', date: '2025-01-10', warranty: '保修至 2028-01' },
+    { id: 3, brand: '西门子', model: 'KA92NV02TI', category: '冰箱', date: '2022-06-01', warranty: '已过保' },
+  ];
+  let history = [
+    { id: 1, brand: '海尔冰箱', model: 'BCD-470WDPG', level: 'red', issue: '传感器故障', date: '09-12', detail: 'E1 冷藏室传感器短路，已联系售后检修。' },
+    { id: 2, brand: '美的冰箱', model: 'BCD-550WKGPZM', level: 'yellow', issue: '超温报警', date: '09-08', detail: 'E6 超温报警，自查门封后恢复正常。' },
+    { id: 3, brand: '西门子冰箱', model: 'KA92NV02TI', level: 'green', issue: '门封清洁', date: '08-30', detail: '门封条清洁，冷气外漏已解决。' },
+  ];
+
+  // ---------- 渲染家电 ----------
+  function renderAppliances() {
+    const list = document.getElementById('applianceList');
+    list.innerHTML = '';
+    appliances.forEach(a => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `
+        <div class="row">
+          <div class="title">${a.brand} ${a.model}</div>
+          <span class="tag">${a.warranty}</span>
+          <button class="del" data-del="${a.id}" title="删除">✕</button>
+        </div>
+        <div class="detail">
+          <div class="detail-row"><b>品类</b><span>${a.category}</span></div>
+          <div class="detail-row"><b>购买日期</b><span>${a.date}</span></div>
+          <div class="detail-row"><b>保修</b><span>${a.warranty}</span></div>
+        </div>`;
+      list.appendChild(div);
+    });
+    list.querySelectorAll('.item').forEach(item => {
+      item.querySelector('.row').onclick = (e) => {
+        if (e.target.closest('.del')) return;
+        item.classList.toggle('open');
+      };
+      item.querySelector('.del').onclick = () => {
+        const id = Number(item.querySelector('.del').dataset.del);
+        const target = appliances.find(x => x.id === id);
+        if (confirm(`确定删除「${target ? target.brand + ' ' + target.model : ''}」吗？`)) {
+          appliances = appliances.filter(x => x.id !== id);
+          renderAppliances();
+        }
+      };
+    });
+  }
+
+  // ---------- 渲染历史 ----------
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '';
+    history.forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `
+        <div class="row">
+          <span class="dot ${h.level}"></span>
+          <div class="title">${h.brand}</div>
+          <span class="tag">${h.issue} · ${h.date}</span>
+          <button class="del" data-del="${h.id}" title="删除">✕</button>
+        </div>
+        <div class="detail">
+          <div class="detail-row"><b>型号</b><span>${h.model}</span></div>
+          <div class="detail-row"><b>结论</b><span>${h.detail}</span></div>
+        </div>`;
+      list.appendChild(div);
+    });
+    list.querySelectorAll('.item').forEach(item => {
+      item.querySelector('.row').onclick = (e) => {
+        if (e.target.closest('.del')) return;
+        item.classList.toggle('open');
+      };
+      item.querySelector('.del').onclick = () => {
+        const id = Number(item.querySelector('.del').dataset.del);
+        const target = history.find(x => x.id === id);
+        if (confirm(`确定删除这条维修记录（${target ? target.issue : ''}）吗？`)) {
+          history = history.filter(x => x.id !== id);
+          renderHistory();
+        }
+      };
+    });
+  }
+
+  // ---------- 加入家电 ----------
+  const overlay = document.getElementById('applianceOverlay');
+  document.getElementById('openAddAppliance').onclick = () => overlay.classList.add('show');
+  document.getElementById('cancelAppliance').onclick = () => overlay.classList.remove('show');
+  document.getElementById('confirmAppliance').onclick = () => {
+    const brand = document.getElementById('fBrand').value;
+    const model = document.getElementById('fModel').value.trim() || '未填型号';
+    const category = document.getElementById('fCategory').value;
+    const date = document.getElementById('fDate').value || '未填';
+    appliances.push({ id: Date.now(), brand, model, category, date, warranty: '保修至 ' + (date ? date.slice(0,4) + '-待定' : '待定') });
+    renderAppliances();
+    overlay.classList.remove('show');
+    document.getElementById('fModel').value = '';
+    document.getElementById('fDate').value = '';
+  };
+
+  // ---------- 图片上传 ----------
+  fileInput.onchange = () => {
+    const f = fileInput.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      pendingImage = { dataUrl: reader.result, name: f.name };
+      previewImg.src = reader.result;
+      previewWrap.style.display = 'flex';
+    };
+    reader.readAsDataURL(f);
+  };
+  rmImage.onclick = () => {
+    pendingImage = null;
+    fileInput.value = '';
+    previewWrap.style.display = 'none';
+  };
+
+  // ---------- 诊断流程 ----------
+  const LEVEL = { green: { text: '可安全自修', badge: '绿 · 可安全自修' }, yellow: { text: '谨慎操作 · 需断电', badge: '黄 · 谨慎操作' }, red: { text: '必须联系专业师傅', badge: '红 · 必须找师傅' } };
+  function scrollBottom() { body.scrollTop = body.scrollHeight; }
+  function addUser(text, img) {
+    const d = document.createElement('div');
+    d.className = 'msg user';
+    d.textContent = text;
+    if (img) { const im = document.createElement('img'); im.className = 'img-thumb'; im.src = img; d.appendChild(im); }
+    body.appendChild(d); scrollBottom();
+  }
+  function addAgent(text) { const d = document.createElement('div'); d.className = 'msg agent'; d.textContent = text; body.appendChild(d); scrollBottom(); }
+  function addQuestion(question, options) {
+    const wrap = document.createElement('div'); wrap.className = 'prompt-line';
+    const q = document.createElement('div'); q.className = 'q'; q.textContent = question;
+    const opts = document.createElement('div'); opts.className = 'options';
+    options.forEach(opt => {
+      const b = document.createElement('button'); b.textContent = opt.label;
+      b.onclick = () => { opts.querySelectorAll('button').forEach(x => x.disabled = true); addUser(opt.label); opt.answer(b); };
+      opts.appendChild(b);
+    });
+    wrap.appendChild(q); wrap.appendChild(opts); body.appendChild(wrap); scrollBottom();
+  }
+  function addReport({ brand, model, category, level, diagnosis, steps, note }) {
+    const L = LEVEL[level];
+    const wrap = document.createElement('div'); wrap.className = 'report';
+    wrap.innerHTML = `
+      <div class="report-head">
+        <div class="nameplate">诊断报告<b>${brand} ${model} · ${category}</b></div>
+        <div class="status-lamp"><span class="lamp ${level}"></span>${L.text}</div>
+      </div>
+      <div class="report-level"><span class="badge ${level}">${L.badge}</span><span>${diagnosis}</span></div>
+      <div class="report-body">
+        ${steps && steps.length ? '<h4>处理建议</h4><ol style="padding-left:20px">' + steps.map(s => `<li style="margin-bottom:4px">${s}</li>`).join('') + '</ol>' : ''}
+        ${note ? '<h4>安全提醒</h4>' + note : ''}
+      </div>`;
+    body.appendChild(wrap); scrollBottom();
+    // 追加一条历史记录
+    history.unshift({ id: Date.now(), brand: brand + category, model, level, issue: LEVEL[level].text, date: '刚刚', detail: diagnosis });
+    renderHistory();
+  }
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function runScenario(q, img) {
+    addUser(q, img);
+    await wait(600);
+    if (img) {
+      addAgent('（已识别图片：这是冰箱的铭牌/故障照片，已结合图片信息分析）');
+      await wait(400);
+    }
+    if (q.includes('不制冷')) {
+      addAgent('先确认一下：冷藏室和冷冻室是都不制冷，还是只有冷藏室不制冷？');
+      await wait(500);
+      addQuestion('屏幕上有显示故障码吗？', [
+        { label: '显示 E1', answer: () => finishE1() },
+        { label: '显示 E3', answer: () => finishE3() },
+        { label: '没有故障码', answer: () => finishNoCode() },
+      ]);
+    } else if (q.includes('门关不严') || q.includes('冷气外漏')) {
+      finishSeal();
+    } else if (q.includes('结冰')) {
+      await wait(400);
+      addQuestion('结冰层大概多厚？', [
+        { label: '很薄一层', answer: () => finishSeal() },
+        { label: '很厚，超过 1 厘米', answer: () => finishFrost() },
+      ]);
+    } else if (q.includes('E1')) {
+      finishE1();
+    } else {
+      await wait(400);
+      addQuestion('能再具体描述一下现象吗？', [
+        { label: '冷藏室不制冷', answer: () => finishE1() },
+        { label: '门关不严', answer: () => finishSeal() },
+        { label: '冷冻室结冰', answer: () => finishFrost() },
+      ]);
+    }
+  }
+
+  function finishE1() { addReport({ brand: '海尔', model: 'BCD-470WDPG', category: '冰箱', level: 'red', diagnosis: 'E1 对应冷藏室传感器短路或断路，主控板无法读取冷藏室温度。这涉及内部电路，不建议自行拆修。', steps: null, note: '请勿自行拆机检测传感器。建议联系海尔售后（400-699-9999）报修，说明故障码 E1。' }); }
+  function finishE3() { addReport({ brand: '海尔', model: 'BCD-470WDPG', category: '冰箱', level: 'red', diagnosis: 'E3 对应冷冻室传感器故障，涉及内部电路，需专业检修。', steps: null, note: '联系售后报修，说明故障码 E3。' }); }
+  function finishNoCode() { addReport({ brand: '海尔', model: 'BCD-470WDPG', category: '冰箱', level: 'yellow', diagnosis: '无故障码但制冷异常，可能为门封不严或温度设置不当。', steps: ['先断电，检查门封条是否变形或有异物', '确认温度设置：冷藏 2~8℃、冷冻 -18℃', '断电重启后观察 2 小时'], note: '自查无效、仍不制冷时，可能涉及制冷系统，请联系售后。' }); }
+  function finishSeal() { addReport({ brand: '西门子', model: 'KA92NV02TI', category: '冰箱', level: 'green', diagnosis: '门封条老化或吸附面有污渍导致关不严，属可自修的表面问题。', steps: ['用温水加中性清洁剂擦拭门封条和门框接触面', '用手沿门封条按压检查有无变形翘起', '若有局部变形，可用吹风机低温档吹软后压平'], note: null }); }
+  function finishFrost() { addReport({ brand: '美的', model: 'BCD-550WKGPZM', category: '冰箱', level: 'yellow', diagnosis: '冷冻室结冰过厚，需断电化霜。', steps: ['拔掉电源插头，打开冷冻室门', '取出食物，用毛巾垫底吸水', '自然化霜，切勿用锐器铲冰（会戳破内胆）', '化完擦干，重新通电'], note: '若频繁严重结冰，可能是门封漏气或化霜系统故障，请联系售后。' }); }
+
+  // 发送
+  sendBtn.onclick = () => {
+    const v = input.value.trim();
+    if (!v && !pendingImage) return;
+    const img = pendingImage ? pendingImage.dataUrl : null;
+    input.value = '';
+    if (pendingImage) { rmImage.onclick(); }  // 清除预览
+    runScenario(v || '（仅图片）', img);
+  };
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') sendBtn.onclick(); });
+  document.getElementById('quickBar').querySelectorAll('button').forEach(b => { b.onclick = () => runScenario(b.dataset.q); });
+
+  // 初始化
+  renderAppliances();
+  renderHistory();
+  (async () => { await wait(400); addAgent('你好，我是家电医生。描述一下冰箱的问题，或点下方的快捷提问开始诊断。'); })();
+</script>
+</body>
+</html>

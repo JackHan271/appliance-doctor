@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 环境变量（含 API key / 密码，绝不能上传）
+.env
+*.env
+*.env.txt
+docker.env.txt
+
+# 前端
+node_modules/
+dist/
+
+# 数据文件（版权 / 体积）
+data/manuals/raw/
+*.db
+milvus_data/
+
+# 系统文件
+.DS_Store
+Thumbs.db

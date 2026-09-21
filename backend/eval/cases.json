@@ -1,0 +1,356 @@
+{
+  "name": "家电故障诊断评估集 v3（冰箱）",
+  "description": "冰箱三品牌（海尔/美的/西门子），覆盖绿/黄/红三级，共 35 例。expected_level 为该场景下最合理维修动作对应的标准安全等级，reason 为标注理由。expected_keywords 用于近似度量诊断可用性（命中任一即算可定位）。",
+  "cases": [
+    {
+      "id": "haier_e1",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冷藏室不制冷，屏幕显示 E1",
+      "fault_code": "E1",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷藏室传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "haier_e2",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "微冻室温度异常，显示 E2",
+      "fault_code": "E2",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "微冻室传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "haier_e3",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冷冻室显示 E3",
+      "fault_code": "E3",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷冻室传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "haier_e4",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E4",
+      "fault_code": "E4",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "环温传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "haier_e5",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E5",
+      "fault_code": "E5",
+      "expected_level": "red",
+      "expected_keywords": ["E2PROM", "主板"],
+      "reason": "E2PROM 读写故障涉及主控板，需专业检修"
+    },
+    {
+      "id": "haier_e6",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冷冻室温度过高报警",
+      "fault_code": "E6",
+      "expected_level": "yellow",
+      "expected_keywords": ["门封", "温度"],
+      "reason": "先查门封/温度设置属用户自查范围，判 yellow；持续报警才涉制冷系统"
+    },
+    {
+      "id": "haier_e7",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E7",
+      "fault_code": "E7",
+      "expected_level": "red",
+      "expected_keywords": ["通讯"],
+      "reason": "通讯故障涉及电路，需专业检修"
+    },
+    {
+      "id": "haier_e8",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E8",
+      "fault_code": "E8",
+      "expected_level": "red",
+      "expected_keywords": ["过零"],
+      "reason": "过零检测异常涉及电路，需专业检修"
+    },
+    {
+      "id": "haier_hl",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "显示屏出现 H 提示",
+      "fault_code": "H",
+      "expected_level": "green",
+      "expected_keywords": ["温度", "门封"],
+      "reason": "H 为温区温度过高提示，调温度/查门封即可，不拆机"
+    },
+    {
+      "id": "haier_seal",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冰箱门关不严，门封条老化变形",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["门封"],
+      "reason": "清洁/检查门封条为表面操作，不拆机"
+    },
+    {
+      "id": "haier_drain",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冷藏室底部有积水",
+      "fault_code": null,
+      "expected_level": "yellow",
+      "expected_keywords": ["排水"],
+      "reason": "清理排水孔需打开内部盖板并断电，属 yellow"
+    },
+    {
+      "id": "haier_odor",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冰箱内有霉味/异味",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["异味", "霉"],
+      "reason": "异味多为食物残渣/内腔污渍，清洁内腔为表面操作，判 green"
+    },
+    {
+      "id": "haier_noise",
+      "brand": "海尔",
+      "category": "refrigerator",
+      "symptom": "冰箱运行噪音很大、有异响",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["噪音", "异响"],
+      "reason": "噪音多为放置不平/异物共振，检查调整属表面操作，判 green"
+    },
+    {
+      "id": "midea_e1",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冷藏室不制冷，显示 E1",
+      "fault_code": "E1",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷藏室传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e2",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冷冻室温度异常，显示 E2",
+      "fault_code": "E2",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "微冻室/冷冻室传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e3",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "变温室异常，显示 E3",
+      "fault_code": "E3",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷冻室/变温室传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e4",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E4",
+      "fault_code": "E4",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "环温传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e5",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E5",
+      "fault_code": "E5",
+      "expected_level": "red",
+      "expected_keywords": ["E2PROM", "除霜"],
+      "reason": "E2PROM/除霜传感器故障涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e6",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冰箱超温报警，显示 E6",
+      "fault_code": "E6",
+      "expected_level": "yellow",
+      "expected_keywords": ["门封", "温度"],
+      "reason": "先查门封/温度设置属用户自查范围，判 yellow"
+    },
+    {
+      "id": "midea_e7",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E7",
+      "fault_code": "E7",
+      "expected_level": "red",
+      "expected_keywords": ["通讯"],
+      "reason": "通讯故障涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e8",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "屏幕显示 E8",
+      "fault_code": "E8",
+      "expected_level": "red",
+      "expected_keywords": ["过零"],
+      "reason": "过零检测异常涉及电路，需专业检修"
+    },
+    {
+      "id": "midea_e9",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冰箱制冷效果差，显示 E9",
+      "fault_code": "E9",
+      "expected_level": "red",
+      "expected_keywords": ["制冷剂"],
+      "reason": "控制板或制冷剂泄漏，需专业检修"
+    },
+    {
+      "id": "midea_hl",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "显示屏出现 H/L 提示",
+      "fault_code": "H",
+      "expected_level": "green",
+      "expected_keywords": ["温度"],
+      "reason": "温区温度提示，调温度/查门封即可，不拆机"
+    },
+    {
+      "id": "midea_defrost",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冷冻室结冰很厚",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["化霜", "结冰"],
+      "reason": "断电自然化霜为表面操作，不拆机，判 green"
+    },
+    {
+      "id": "midea_seal",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冰箱门封条老化关不严",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["门封"],
+      "reason": "清洁/检查门封条为表面操作，不拆机"
+    },
+    {
+      "id": "midea_odor",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冰箱内有异味",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["异味"],
+      "reason": "异味多为食物残渣/内腔污渍，清洁内腔为表面操作，判 green"
+    },
+    {
+      "id": "midea_nonstop",
+      "brand": "美的",
+      "category": "refrigerator",
+      "symptom": "冰箱一直运转不停机",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["不停机", "门封"],
+      "reason": "先查门封/温度设置/散热空间属表面自查，判 green；持续不停机才涉制冷系统"
+    },
+    {
+      "id": "siemens_e1",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱显示 E1",
+      "fault_code": "E1",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷藏室传感器故障，需专业检修（第三方资料）"
+    },
+    {
+      "id": "siemens_e2",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱显示 E2",
+      "fault_code": "E2",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷藏室蒸发器传感器故障，需专业检修（第三方资料）"
+    },
+    {
+      "id": "siemens_e3",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱显示 E3",
+      "fault_code": "E3",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷冻室传感器故障，需专业检修（第三方资料）"
+    },
+    {
+      "id": "siemens_e4",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱显示 E4",
+      "fault_code": "E4",
+      "expected_level": "red",
+      "expected_keywords": ["传感器"],
+      "reason": "冷冻室冷凝器传感器故障，需专业检修（第三方资料）"
+    },
+    {
+      "id": "siemens_seal",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱门封条老化关不严",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["门封"],
+      "reason": "清洁/检查门封条为表面操作，不拆机"
+    },
+    {
+      "id": "siemens_temp",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱温度设置不对导致制冷异常",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["温度"],
+      "reason": "调温度设置为表面操作，不拆机"
+    },
+    {
+      "id": "siemens_drain",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冷藏室底部有积水",
+      "fault_code": null,
+      "expected_level": "yellow",
+      "expected_keywords": ["排水"],
+      "reason": "清理排水孔需打开内部盖板并断电，属 yellow"
+    },
+    {
+      "id": "siemens_odor",
+      "brand": "西门子",
+      "category": "refrigerator",
+      "symptom": "冰箱内有异味",
+      "fault_code": null,
+      "expected_level": "green",
+      "expected_keywords": ["异味"],
+      "reason": "异味多为食物残渣/内腔污渍，清洁内腔为表面操作，判 green"
+    }
+  ]
+}

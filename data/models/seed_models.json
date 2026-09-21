@@ -1,0 +1,14 @@
+{
+  "note": "型号种子数据，仅作示例/启动用，需用户核实补充。prefixes 为常见型号前缀，用于铭牌识别时的型号初步匹配。",
+  "brands": {
+    "海尔": {
+      "refrigerator": {"prefixes": ["BCD-"], "examples": ["BCD-470WDPG", "BCD-501WGHFD14S8U1"]}
+    },
+    "美的": {
+      "refrigerator": {"prefixes": ["BCD-"], "examples": ["BCD-550WKGPZM", "BCD-476WSPZM(E)"]}
+    },
+    "西门子": {
+      "refrigerator": {"prefixes": ["KA", "KG"], "examples": ["KA92NV02TI", "KG28UA290C"]}
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "brand": "海尔",
+  "brand_en": "Haier",
+  "note": "故障码含义因型号/系列而异，以具体机型说明书为准。本表为公开资料整理，覆盖常见代码，非官方完整表。",
+  "references": [
+    "https://www.haier.com/sa/service-support/self-service/20191216_112155.shtml",
+    "https://ask.zol.com.cn/x/16370983.html"
+  ],
+  "categories": {
+    "refrigerator": {
+      "note": "家用冰箱常见代码；医用/酒柜/出口机型定义可能不同。",
+      "codes": [
+        {"code": "E1", "meaning": "冷藏室传感器短路或断路", "level": "red", "source": "公开维修资料"},
+        {"code": "E2", "meaning": "微冻室传感器短路或断路", "level": "red", "source": "公开维修资料"},
+        {"code": "E3", "meaning": "冷冻室传感器短路或断路", "level": "red", "source": "公开维修资料"},
+        {"code": "E4", "meaning": "环温传感器短路或断路", "level": "red", "source": "公开维修资料"},
+        {"code": "E5", "meaning": "E2PROM 读写故障", "level": "red", "source": "公开维修资料"},
+        {"code": "E6", "meaning": "超温报警（冷冻温度持续过高）", "level": "yellow", "source": "公开维修资料"},
+        {"code": "E7", "meaning": "通讯不合格", "level": "red", "source": "公开维修资料"},
+        {"code": "E8", "meaning": "过零不合格", "level": "red", "source": "公开维修资料"},
+        {"code": "H/L", "meaning": "对应温区温度过高/过低提示", "level": "green", "source": "公开维修资料"}
+      ]
+    }
+  }
+}

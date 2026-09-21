@@ -1,0 +1,19 @@
+{
+  "brand": "西门子",
+  "brand_en": "Siemens",
+  "note": "冰箱代码来自第三方维修资料，非西门子官方确认，不保证适用所有型号，以具体说明书为准。",
+  "references": [
+    "https://remont-master.pro/errors-code/siemens/"
+  ],
+  "categories": {
+    "refrigerator": {
+      "note": "第三方维修资料，非西门子官方确认；可能不适用所有型号。",
+      "codes": [
+        {"code": "E1", "meaning": "冷藏室空气温度传感器故障", "level": "red", "source": "第三方维修资料"},
+        {"code": "E2", "meaning": "冷藏室蒸发器传感器故障", "level": "red", "source": "第三方维修资料"},
+        {"code": "E3", "meaning": "冷冻室传感器故障", "level": "red", "source": "第三方维修资料"},
+        {"code": "E4", "meaning": "冷冻室冷凝器温度传感器故障", "level": "red", "source": "第三方维修资料"}
+      ]
+    }
+  }
+}

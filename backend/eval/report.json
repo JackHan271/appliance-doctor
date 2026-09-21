@@ -1,0 +1,292 @@
+{
+  "summary": {
+    "total": 35,
+    "level_accuracy": 0.8857142857142857,
+    "over_strict": 3,
+    "under_strict": 1,
+    "dangerous_miss": 0,
+    "usable": 24
+  },
+  "rows": [
+    {
+      "id": "haier_e1",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "屏幕显示 E1 表示冷藏室温度传感器短路或断路，属于传感器/主控板相关故障，请勿自行拆机检修，建议联系海尔售后上门更换传…"
+    },
+    {
+      "id": "haier_e2",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E2 表示微冻室温度传感器短路或断路，属于传感器/主控板相关故障，涉及内部电路，请勿自行拆机，建议联系海尔售后上门检测更…"
+    },
+    {
+      "id": "haier_e3",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E3 表示冷冻室传感器短路或断路，属于传感器/主控板相关故障，涉及内部电路，请勿自行拆机，建议联系海尔售后上门检测更换传…"
+    },
+    {
+      "id": "haier_e4",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E4 表示环温传感器短路或断路，属于传感器/主控板电路类故障，涉及内部电路与主控板，请勿自行拆机检修，建议联系海尔售后上…"
+    },
+    {
+      "id": "haier_e5",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E5为E2PROM读写故障，属于主控板层面的问题，普通用户无法自行修复，请勿拆机，建议直接联系海尔售后上门检修或更换主控…"
+    },
+    {
+      "id": "haier_e6",
+      "expected": "yellow",
+      "actual": "green",
+      "hit": false,
+      "usable": true,
+      "diagnosis_preview": "E6 是冷冻室超温报警，多因门封漏冷、温度设置偏高或蒸发器结霜过厚引起。请先检查冷冻室门是否关严、门封条有无老化变形，确…"
+    },
+    {
+      "id": "haier_e7",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E7 为通讯故障，通常与主控板、显示板之间的连接或板件本身有关，属于内部电路问题，请勿自行拆机，建议联系海尔售后上门检修…"
+    },
+    {
+      "id": "haier_e8",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E8 属于过零检测异常，通常与主控板或供电有关，属于需专业处理的范围。请先确认冰箱是否已断电重启、插座是否接触良好；若重…"
+    },
+    {
+      "id": "haier_hl",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "H 是温度提示而非故障代码，说明对应温区温度偏高。请先检查门是否关严、门封条是否老化变形，确认近期是否放入大量食物或开门…"
+    },
+    {
+      "id": "haier_seal",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "门关不严主要由门封条老化变形引起，可先清洁门封条并检查门体是否下垂，若封条已硬化变形则需更换门封条。"
+    },
+    {
+      "id": "haier_drain",
+      "expected": "yellow",
+      "actual": "yellow",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "haier_odor",
+      "expected": "green",
+      "actual": "yellow",
+      "hit": false,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "haier_noise",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "midea_e1",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "显示E1表示冷藏室温度传感器短路或断路，导致冷藏室不制冷。此类故障涉及传感器及主控板内部电路，属于高压/电路类维修，请勿…"
+    },
+    {
+      "id": "midea_e2",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E2 指向冷冻室（微冻室）温度传感器故障，属于传感器/主控板相关电路问题，涉及内部部件，请勿自行拆机，建议联系美的售后上…"
+    },
+    {
+      "id": "midea_e3",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E3 表示变温室（或冷冻室）温度传感器故障，属于传感器/主控板相关故障，可能原因包括传感器损坏、连接线松动或主控板检测电…"
+    },
+    {
+      "id": "midea_e4",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E4 表示环温传感器短路或断路，属于传感器/主控板相关故障，可能原因包括传感器本身损坏、连接线松动或主控板检测电路异常，…"
+    },
+    {
+      "id": "midea_e5",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E5指向除霜传感器或主控板E2PROM故障，且断电重启后仍持续显示，说明并非临时性误报，属于需要专业检修的硬件故障，请勿…"
+    },
+    {
+      "id": "midea_e6",
+      "expected": "yellow",
+      "actual": "yellow",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "midea_e7",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "midea_e8",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E8 属于化霜传感器/过零检测类故障，涉及传感器与主控板内部电路，普通用户无法自行处理，请勿拆机，建议直接联系美的售后上…"
+    },
+    {
+      "id": "midea_e9",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E9 属于主控板或制冷系统类故障，可能原因包括主控板损坏、制冷剂泄漏或相关传感器/线路异常，这类问题涉及高压电与制冷剂，…"
+    },
+    {
+      "id": "midea_hl",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "H/L 是温度提示而非故障代码，说明对应温区温度暂时偏高或偏低，通常不是硬件损坏。请先检查并调整该温区温度设置，确认门封…"
+    },
+    {
+      "id": "midea_defrost",
+      "expected": "green",
+      "actual": "yellow",
+      "hit": false,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "midea_seal",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "门封条老化关不严会导致冷气外泄、耗电增加和结霜结冰，请先清洁门封条并检查门体是否下垂，若封条已硬化变形则需更换门封条。"
+    },
+    {
+      "id": "midea_odor",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "midea_nonstop",
+      "expected": "green",
+      "actual": "yellow",
+      "hit": false,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "siemens_e1",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E1 表示冷藏室空气温度传感器故障，属于传感器/主控板相关故障，可能原因包括传感器损坏、连接线松动或主控板采样异常，建议…"
+    },
+    {
+      "id": "siemens_e2",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E2 表示冷藏室蒸发器传感器故障，属于传感器/主控板相关故障，可能原因包括传感器本身损坏、连接线松脱或断路、主控板采样电…"
+    },
+    {
+      "id": "siemens_e3",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E3 表示冷冻室传感器故障，属于传感器/主控板相关故障，涉及内部电路，请勿自行拆机检修，建议联系西门子官方售后上门检测更…"
+    },
+    {
+      "id": "siemens_e4",
+      "expected": "red",
+      "actual": "red",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "E4 指向冷冻室冷凝器温度传感器故障，属于传感器/主控板相关故障，可能原因包括传感器损坏、线束接触不良或主控板采样异常，…"
+    },
+    {
+      "id": "siemens_seal",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": true,
+      "diagnosis_preview": "门封条老化关不严会导致冷气外泄、耗电增加和结霜，可先清洁门封条并检查是否变形，若老化严重建议更换门封条。"
+    },
+    {
+      "id": "siemens_temp",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "siemens_drain",
+      "expected": "yellow",
+      "actual": "yellow",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    },
+    {
+      "id": "siemens_odor",
+      "expected": "green",
+      "actual": "green",
+      "hit": true,
+      "usable": false,
+      "diagnosis_preview": ""
+    }
+  ]
+}
