@@ -19,6 +19,11 @@ data/manuals/raw/
 *.db
 milvus_data/
 
+# AI 协作痕迹（不公开）
+CLAUDE.md
+devlog/
+恢复指南.md
+
 # 系统文件
 .DS_Store
 Thumbs.db
