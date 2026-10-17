@@ -1,6 +1,6 @@
 # Docker 一键部署
 
-三个容器：PostgreSQL（数据库）、backend（FastAPI + 内嵌 Milvus Lite）、frontend（React build + nginx）。
+三个容器：PostgreSQL（数据库）、backend（FastAPI + Milvus 向量库）、frontend（React build + nginx）。
 
 ## 前置：安装 Docker Desktop
 
@@ -41,5 +41,11 @@ docker compose down -v       # 停止并删除数据卷（清空数据库和向�
 ## 说明
 
 - **数据持久化**：PostgreSQL 数据在 `pgdata` 卷、Milvus 向量数据在 `milvus_data` 卷，重启容器不丢。
-- **RAG 语料**：Docker 版向量库默认为空，但诊断主流程（LLM + 故障码查表 + 安全护栏）不受影响；如需检索知识，下载说明书 PDF 后用 `docker cp` 放进 backend 容器，再 `docker exec backend python scripts/ingest_manuals.py` 入库。
+- **RAG 语料**：Docker 版向量库默认为空，但诊断主流程（LLM + 故障码查表 + 安全护栏 + 证据核验）不受影响。如需检索知识，在容器内执行统一入库脚本（会分别写入「故障码库」与「手册库」两个 collection）：
+
+  ```powershell
+  docker exec backend python ingest.py
+  ```
+
+  若只需诊断用的故障码知识、暂不入手册，可加 `--no-manuals`。重新入库后调用 `POST /api/admin/reindex` 刷新后端的关键词索引，无需重启容器。
 - **端口**：5173（前端）、8000（后端）、5432（数据库，也映射到宿主机方便本地 psql 查看）。

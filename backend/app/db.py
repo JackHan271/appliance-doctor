@@ -56,6 +56,31 @@ class RepairHistory(Base):
         }
 
 
+class UserMemory(Base):
+    """长期记忆：跨会话保留的用户信息（偏好 / 事实 / 结论）。
+
+    按 (user_id, key) 唯一——同 key 覆盖即为"记忆更新"，避免同一事实存多份。
+    """
+
+    __tablename__ = "user_memory"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String, index=True, nullable=False)
+    key = Column(String, nullable=False)          # 如「品牌」「偏好」「结论」
+    value = Column(String, nullable=False)        # 如「海尔冰箱」
+    category = Column(String, default="fact")     # preference | fact | conclusion
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "key": self.key,
+            "value": self.value,
+            "category": self.category,
+            "updated": self.updated_at.strftime("%m-%d %H:%M") if self.updated_at else "",
+        }
+
+
 def init_db() -> None:
     """建表（幂等）。在应用启动时调用。"""
     Base.metadata.create_all(engine)

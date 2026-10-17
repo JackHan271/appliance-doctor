@@ -23,3 +23,11 @@ class DiagnosisState(TypedDict, total=False):
     user_answer: str | None         # 用户对反问的回答（每次诊断后清空）
     history: list[dict]             # 问答历史 [{"q": "...", "a": "..."}]
     max_turns: int                  # 最大反问轮数
+    # 证据核验（Grounding）
+    evidence: list[str]             # 本轮检索到的证据片段，供核验节点比对
+    grounded: bool                  # 诊断结论是否被证据支撑
+    grounding_notes: str | None     # 核验意见（指出哪些声称缺证据）
+    grounding_retries: int          # 已打回重诊的次数（防止无限循环）
+    # 记忆体系
+    user_id: str                    # 用户标识（长期记忆的键；不传则不启用长期记忆）
+    summary: str                    # 早期对话折叠成的滚动摘要（上下文工程）

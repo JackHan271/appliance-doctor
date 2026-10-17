@@ -27,3 +27,7 @@ devlog/
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# 环境变量备份（含密钥，一律不入库；模板 .env.example 除外）
+.env.*
+!.env.example
