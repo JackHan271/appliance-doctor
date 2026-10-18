@@ -1,8 +1,15 @@
+# Python 依赖与缓存
 **/.venv
 **/__pycache__
-**/node_modules
-**/.git
 **/*.pyc
+
+# 前端依赖
+**/node_modules
+
+# Git 历史
+**/.git
+
+# 本地密钥与数据（不进镜像）
 backend/.env
 backend/milvus_data
 data/manuals/raw
