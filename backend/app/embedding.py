@@ -1,7 +1,7 @@
 """Embedding 可配置抽象：bge（本地）/ dashscope（通义）/ openai。
 
 选型由环境变量 EMBEDDING_PROVIDER 决定，业务代码只调用 embed_texts()，
-换模型不改业务代码（可配置抽象，面试可讲）。
+换模型不改业务代码（可配置抽象）。
 """
 from .config import settings
 

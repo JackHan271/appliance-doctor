@@ -31,3 +31,7 @@ Thumbs.db
 # 环境变量备份（含密钥，一律不入库；模板 .env.example 除外）
 .env.*
 !.env.example
+
+# 测试脚本临时文件
+backend/_thread_id.txt
+PROJECT_STATUS.md

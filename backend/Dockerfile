@@ -4,11 +4,13 @@ WORKDIR /app
 
 # 先装依赖（利用 Docker 层缓存）
 COPY backend/requirements.txt .
-RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 复制后端代码与数据目录
 COPY backend/app ./app
 COPY backend/scripts ./scripts
+COPY backend/ingest.py ./ingest.py
+COPY backend/eval ./eval
 COPY data ./data
 
 EXPOSE 8000

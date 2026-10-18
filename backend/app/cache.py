@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """LLM 响应缓存：相同请求直接复用，省 token 也省延迟。
 
-设计要点（面试可讲）：
+设计要点：
 - **只在确定性输出（temperature ≈ 0）时启用**：否则会把一次随机采样永久固化，
   语义上就是错的。诊断 / 安全审查都是温度 0，所以天然适合缓存。
 - key = sha256(model + system + prompt + temperature)，防碰撞。

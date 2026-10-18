@@ -16,6 +16,7 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
+from ..config import settings
 from ..context import compact, needs_compaction
 from ..json_utils import parse_json
 from ..llm import chat, chat_with_image
@@ -300,7 +301,7 @@ def safety_review(state: DiagnosisState) -> dict:
 def grounding_check(state: DiagnosisState) -> dict:
     """证据核验节点：独立复核诊断结论是否有证据支撑，不达标则打回重诊。
 
-    设计要点（面试可讲）：
+    设计要点：
     这是「生成 → 核验」闭环里的核验环节。核心思路和 safety_review 一致——
     **用一个独立 Agent 去挑战另一个 Agent 的输出**，而不是让生成者自己给自己打分。
     自己给自己打分的问题是"既当运动员又当裁判"，容易放过自己的错。
@@ -336,7 +337,7 @@ def grounding_check(state: DiagnosisState) -> dict:
 def memory_write(state: DiagnosisState) -> dict:
     """会话结束时把值得长期记住的信息写入长期记忆。
 
-    设计要点（面试可讲）：
+    设计要点：
     - **只在会话结束时写一次**，而不是每轮都写——省调用、避免记忆碎片化；
     - 用轻量模型做抽取（task="summarize" 档位），这类提炼不需要强模型；
     - 按 key upsert，同 key 覆盖即"记忆更新"，天然处理新旧信息冲突；
@@ -369,7 +370,7 @@ def route_after_grounding(state: DiagnosisState) -> str:
     return "safety_review"
 
 
-def build_graph():
+def build_graph(checkpointer=None):
     g = StateGraph(DiagnosisState)
     g.add_node("diagnose", diagnose)
     g.add_node("ask_user", ask_user)
@@ -391,8 +392,54 @@ def build_graph():
     # 安全审查 → 写入长期记忆 → 结束（记忆写入不影响前端拿到的诊断结果）
     g.add_edge("safety_review", "memory_write")
     g.add_edge("memory_write", END)
-    # checkpointer 用于支持 interrupt/resume 的状态持久化（进程内内存）
-    return g.compile(checkpointer=MemorySaver())
+    # checkpointer 用于支持 interrupt/resume 的状态持久化
+    return g.compile(checkpointer=checkpointer or MemorySaver())
 
 
+def make_checkpointer():
+    """创建会话状态 checkpointer：优先 Redis，不可用则回退内存。
+
+    【为什么用 Redis（设计要点）】
+    MemorySaver 把会话状态存在进程内存里，后端一重启、多轮对话的 thread 状态全丢，
+    用户接着上一轮回答就会失败；也不支持多实例部署。
+    换成 RedisSaver 后，checkpoint 持久化到 Redis（依赖 RedisJSON + RediSearch，
+    需 Redis Stack），重启后同一 thread_id 仍可继续，多实例也能共享状态。
+
+    【优雅降级】Redis 连不上时**静默回退 MemorySaver**，绝不让存储层故障拖垮服务——
+    只是退回"重启丢状态"的老行为，而不是启动失败。
+    """
+    if not settings.redis_url:
+        return MemorySaver()
+    try:
+        from langgraph.checkpoint.redis import RedisSaver
+
+        saver = RedisSaver(redis_url=settings.redis_url)
+        saver.setup()  # 幂等：创建 RediSearch 索引
+        return saver
+    except Exception:
+        return MemorySaver()
+
+
+def init_graph_with_redis() -> bool:
+    """启动时尝试切换到 Redis checkpointer。
+
+    模块级 `graph` 默认用 MemorySaver（保证 import 永不失败）；
+    本函数在 FastAPI lifespan 里调用，成功则用 RedisSaver 重建图。
+    返回 True 表示已切换，False 表示保持内存态。
+    """
+    global graph
+    if not settings.redis_url:
+        return False
+    try:
+        from langgraph.checkpoint.redis import RedisSaver
+
+        saver = RedisSaver(redis_url=settings.redis_url)
+        saver.setup()
+        graph = build_graph(checkpointer=saver)
+        return True
+    except Exception:
+        return False
+
+
+# 模块级默认图：内存 checkpointer，import 永不失败（Redis 在 lifespan 里按需切换）
 graph = build_graph()

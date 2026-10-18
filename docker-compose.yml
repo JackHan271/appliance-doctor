@@ -14,6 +14,29 @@ services:
       timeout: 3s
       retries: 10
 
+  milvus:
+    build:
+      context: ./milvus
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - milvus_data:/milvus_data
+    ports:
+      - "19530:19530"
+
+  redis:
+    image: redis/redis-stack-server:latest
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   backend:
     build:
       context: .
@@ -21,17 +44,20 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/appliance_doctor
+      MILVUS_URI: http://milvus:19530
+      REDIS_URL: redis://redis:6379/0
       DATA_DIR: /app/data
-      MILVUS_URI: /app/data/milvus/milvus.db
       HF_ENDPOINT: https://hf-mirror.com
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
-    volumes:
-      - milvus_data:/app/data/milvus
     ports:
       - "8000:8000"
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+      milvus:
+        condition: service_started
 
   frontend:
     build:
@@ -46,3 +72,4 @@ services:
 volumes:
   pgdata:
   milvus_data:
+  redis_data:

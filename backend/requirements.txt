@@ -13,3 +13,5 @@ mcp<2
 pypdf
 sqlalchemy
 psycopg2-binary
+redis
+langgraph-checkpoint-redis

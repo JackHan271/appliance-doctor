@@ -11,18 +11,26 @@ from starlette.concurrency import run_in_threadpool
 from . import cache, observability
 from .cost import cost_of_trace
 from .db import Appliance, RepairHistory, SessionLocal, init_db
-from .graph.diagnosis import graph
+from .graph import diagnosis as dg
 from .tools.fault_code import lookup_fault_code
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """应用生命周期：启动时建表 + 后台预热本地模型。
+    """应用生命周期：启动时建表、切换 Redis checkpointer、后台预热本地模型。
 
     用 lifespan 取代已弃用的 @app.on_event("startup")
     （FastAPI 新版推荐写法，启动/关闭逻辑集中在一处）。
     """
     init_db()
+
+    # 尝试把会话状态 checkpointer 从内存切到 Redis（跨重启持久化）。
+    # 失败静默回退内存，不阻塞启动。
+    from .graph.diagnosis import init_graph_with_redis
+
+    redis_ok = init_graph_with_redis()
+    print(f"[lifespan] 会话状态 checkpointer：{'Redis（跨重启持久化）' if redis_ok else '内存（重启即丢）'}")
+
     # 后台线程预热本地模型，不阻塞服务启动
     import threading
 
@@ -90,7 +98,7 @@ def _diagnose_sync(payload: dict) -> dict:
     observability.start_trace()
     try:
         if answer is not None:
-            result = graph.invoke(Command(resume=answer), config=config)
+            result = dg.graph.invoke(Command(resume=answer), config=config)
         else:
             initial = {
                 k: payload.get(k)
@@ -106,7 +114,7 @@ def _diagnose_sync(payload: dict) -> dict:
                 hypotheses=[],
                 summary="",           # 上下文工程：滚动摘要初始为空
             )
-            result = graph.invoke(initial, config=config)
+            result = dg.graph.invoke(initial, config=config)
     finally:
         trace = observability.finish_trace()
 

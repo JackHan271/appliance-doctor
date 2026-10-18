@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """MCP server：以标准 MCP 协议暴露工具、资源与提示模板。
 
-【MCP 的三种能力都实现了（面试可讲）】
+【MCP 的三种能力都实现了（设计要点）】
 规范里 MCP Server 可以暴露三类东西，控制方各不相同：
   · **Tools（工具）**：可执行的函数，**模型自主决定**是否调用（model-controlled）；
   · **Resources（资源）**：可读取的数据源，**由宿主决定**何时纳入上下文（application-driven）；
