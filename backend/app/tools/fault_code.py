@@ -21,7 +21,7 @@ def lookup_fault_code(
     """按品牌 + 品类 + 故障码查询。
 
     category: refrigerator（冰箱）/ air_conditioner（空调）
-    load_type: 历史遗留（洗衣机波轮/滚筒维度），空调/冰箱不使用，忽略即可。
+    load_type: 已废弃参数（早期洗衣机维度），保留仅为兼容旧调用；冰箱项目忽略。
     """
     brand_en = BRANDS.get(brand)
     if not brand_en:

@@ -1,6 +1,6 @@
 """测试视觉识别：python test_vision.py 图片路径
 
-例：python test_vision.py C:\\Users\\ASUS\\Desktop\\photo.jpg
+例：python test_vision.py C:/path/to/photo.jpg
 """
 import base64
 import sys

@@ -40,8 +40,8 @@ mcp = FastMCP("appliance-doctor")
 def fault_code(brand: str, category: str, code: str, load_type: str | None = None) -> dict:
     """查询家电故障码含义与安全等级。
 
-    category: refrigerator / washing_machine
-    load_type: 仅洗衣机需要，top_load（波轮）/ front_load（滚筒）
+    category: refrigerator（本项目仅支持冰箱）
+    load_type: 历史遗留参数（洗衣机波轮/滚筒），冰箱忽略；保留以兼容旧客户端
     """
     r = lookup_fault_code(brand, category, code, load_type)
     return r or {"found": False}

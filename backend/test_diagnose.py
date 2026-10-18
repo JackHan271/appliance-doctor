@@ -25,21 +25,21 @@ def post(path: str, payload: dict) -> dict:
 def main() -> None:
     # 1. 模糊提问，触发多轮反问
     r = post(
-        "/diagnose",
-        {"brand": "海尔", "category": "washing_machine", "symptom": "洗衣机洗着洗着突然停了"},
+        "/api/diagnose",
+        {"brand": "海尔", "category": "refrigerator", "symptom": "冰箱冷藏室不制冷"},
     )
     print("第1轮:")
     print(json.dumps(r, ensure_ascii=False, indent=2))
 
     thread_id = r.get("thread_id")
-    answers = ["屏幕显示 E1", "排水管没有弯折", "上盖关好了"]
+    answers = ["屏幕显示 E1", "门封看起来正常", "已经断电重启过了"]
 
     # 2. 自动回答追问，直到 status=done（最多 3 轮）
     for i in range(3):
         if r.get("status") != "need_info":
             break
         ans = answers[i] if i < len(answers) else "没有"
-        r = post("/diagnose", {"thread_id": thread_id, "answer": ans})
+        r = post("/api/diagnose", {"thread_id": thread_id, "answer": ans})
         print(f"\n第{i + 2}轮（回答：{ans}）:")
         print(json.dumps(r, ensure_ascii=False, indent=2))
 

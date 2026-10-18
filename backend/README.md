@@ -18,7 +18,7 @@ backend/
       nameplate.py     # 铭牌识别（视觉）
       symptom.py       # 故障现象识别（视觉）
       safety_manual.py # 安全手册检索
-    mcp_server.py      # 以 MCP 协议暴露上述工具（stdio）
+    mcp_server.py      # 以 MCP 协议暴露上述工具（stdio / Streamable HTTP）
     rag.py             # 分库混合检索：稠密 + BM25 → RRF → 重排
     bm25.py            # 自实现 BM25 与 RRF（零依赖）
     rerank.py          # Cross-Encoder 重排
@@ -26,6 +26,8 @@ backend/
     embedding.py       # Embedding 抽象（bge / dashscope / openai）
     observability.py   # trace / span 埋点（contextvars）
     cost.py            # 任务级模型路由与费用估算
+    memory.py          # 三层记忆的长期层（user_memory 表）
+    context.py         # 上下文工程：token 预算 + 滚动摘要
     cache.py           # 响应缓存（内存 LRU / Redis，自动降级）
     db.py              # PostgreSQL 模型
   ingest.py            # 统一语料入库（分库 + 中文过滤 + 幂等）
@@ -80,7 +82,7 @@ START → diagnose → 条件边
     ├─ 信息不足且未达轮数上限 → ask_user（interrupt 反问）→ diagnose（循环）
     └─ 否则 → grounding_check → 条件边
                                   ├─ 核验不过且未超重试上限 → diagnose（打回重诊）
-                                  └─ 否则 → safety_review → END
+                                  └─ 否则 → safety_review → memory_write → END
 ```
 
 - **反问**：信息不足时用 `interrupt` 挂起图，等用户回答后 `Command(resume=...)` 恢复。

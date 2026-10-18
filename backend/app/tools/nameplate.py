@@ -12,7 +12,7 @@ def read_nameplate(image_base64: str, media_type: str = "image/jpeg") -> dict:
     """
     prompt = (
         "请识别照片中家电铭牌上的品牌(brand)与型号(model)，并判断品类(category)。\n"
-        'category 取值：refrigerator（冰箱）/ washing_machine（洗衣机），无法判断时留空字符串。\n'
+        'category 取值：refrigerator（冰箱）；无法判断时留空字符串。\n'
         '严格输出 JSON：{"brand": "", "model": "", "category": ""}'
     )
     raw = chat_with_image(prompt, image_base64, media_type, system=NAMEPLATE_SYSTEM)

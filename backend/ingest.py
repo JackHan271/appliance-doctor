@@ -60,14 +60,8 @@ def build_fault_code_chunks() -> list[str]:
         data = json.loads(path.read_text(encoding="utf-8"))
         brand = data.get("brand", "")
         for cat_name, cat in (data.get("categories") or {}).items():
-            cat_cn = {"refrigerator": "冰箱", "washing_machine": "洗衣机"}.get(cat_name, cat_name)
-
-            groups = []
-            if cat_name == "washing_machine":
-                for lt, lt_cn in (("top_load", "波轮"), ("front_load", "滚筒")):
-                    groups.append((f"{lt_cn}式", (cat.get(lt) or {}).get("codes") or []))
-            else:
-                groups.append(("", cat.get("codes") or []))
+            cat_cn = {"refrigerator": "冰箱"}.get(cat_name, cat_name)
+            groups = [("", cat.get("codes") or [])]
 
             for lt_cn, codes in groups:
                 for c in codes:

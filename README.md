@@ -4,11 +4,21 @@
 
 > ⚠️ 重要：本项目的维修建议仅供参考，不能替代专业检修。涉及高压电、压缩机、制冷剂、主控板、传感器、加热管的场景，请务必联系官方售后。
 
+## 亮点
+
+- **三个 Agent 独立复核**：诊断、证据核验、安全审查各司其职；证据不足自动打回重诊，安全等级由独立 Agent 复核。
+- **分库混合检索**：故障码库与手册库分开召回，稠密向量 + 自实现 BM25 → RRF 融合 → Cross-Encoder 重排。
+- **安全可量化**：135 例评估集，关缓存实测 red 档 100/100、危险漏报 0、安全护栏 7/7。
+- **会话可恢复**：RedisSaver 持久化多轮状态，服务重启后对话不中断。
+- **一键部署**：Docker Compose 五服务（PostgreSQL / Milvus / Redis Stack / backend / frontend）。
+
+技术栈：FastAPI · LangGraph · DeepSeek · Milvus · BGE · BM25 · MCP · Redis · PostgreSQL · React · Docker
+
 ## 结构
 
 - `frontend/app` - React 前端，四区域界面：家电名单 / 提问诊断 / 维修历史 / 安全手册
 - `backend/app` - FastAPI 后端
-- `backend/app/graph` - LangGraph 多 Agent 诊断图：诊断 / 反问 / 证据核验 / 安全审查
+- `backend/app/graph` - LangGraph 多 Agent 诊断图：诊断 / 反问 / 证据核验 / 安全审查 / 长期记忆写入
 - `backend/app/tools` - 工具实现：查故障码 / 读铭牌 / 识别现象 / 查安全手册
 - `backend/app/mcp_server.py` - MCP Server，暴露 4 个 Tools、3 个 Resources、2 个 Prompts
 - `backend/app/rag.py` - 分库混合检索：稠密向量 + BM25 关键词，RRF 融合后重排
@@ -62,6 +72,8 @@ uvicorn app.main:app --reload
 cd frontend/app
 npm run dev
 ```
+
+> 可选：另起 Redis Stack（`docker run -d --name redis-stack -p 6379:6379 redis/redis-stack-server:latest`），并把 `REDIS_URL` 填进 `.env`，会话状态即可跨重启恢复；不启动会自动回退内存。
 
 首次运行需要先灌语料，把故障码与中文手册分别写入两个知识库：
 

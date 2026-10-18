@@ -4,7 +4,7 @@
     python test_mcp.py
 
 预期：列出 4 个工具（fault_code / nameplate / symptom / safety_manual），
-并返回海尔洗衣机 E1（波轮）的查表结果。
+并返回海尔冰箱 E1 的查表结果。
 """
 import asyncio
 
@@ -28,9 +28,8 @@ async def main() -> None:
                 "fault_code",
                 {
                     "brand": "海尔",
-                    "category": "washing_machine",
+                    "category": "refrigerator",
                     "code": "E1",
-                    "load_type": "top_load",
                 },
             )
             for c in result.content:

@@ -1,4 +1,4 @@
-"""评估 harness：跑评估集、调 /diagnose、统计安全指标、输出报告。
+"""评估 harness：跑评估集、调 /api/diagnose、统计安全指标、输出报告。
 
 用法（backend 目录、已激活 venv、uvicorn 已在跑）：
     python -m eval.run_eval                  # 跑全部（手工集 + 自动生成集）
